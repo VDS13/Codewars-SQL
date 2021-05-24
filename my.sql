@@ -28,8 +28,4 @@ SELECT
 FROM decimals
 
 ### 5 ###
-###Given a Divisor and a Bound , Find the largest integer N , Such That ,###
-###Conditions :###
-###N is divisible by divisor###
-###N is less than or equal to bound###
-###N is greater than 0.###
+###For this challenge you need to create a simple query to display each unique clan with their total points and ranked by their total points.###
