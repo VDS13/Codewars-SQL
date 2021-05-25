@@ -68,3 +68,11 @@ GROUP BY CAST(p.created_at AS DATE)
 ORDER BY CAST(p.created_at AS DATE)) tmp
 
 ### 9 ###
+###Given a database of first and last IPv4 addresses, calculate the number of addresses between them (including the first one, excluding the last one).###
+CREATE FUNCTION ip2int(text) RETURNS bigint AS $$
+SELECT split_part($1,'.',1)::bigint*16777216 + split_part($1,'.',2)::bigint*65536 +
+ split_part($1,'.',3)::bigint*256 + split_part($1,'.',4)::bigint;
+$$ LANGUAGE SQL  IMMUTABLE RETURNS NULL ON NULL INPUT;
+
+SELECT id, (ip2int(last) - ip2int(first)) AS ips_between FROM ip_addresses;
+
