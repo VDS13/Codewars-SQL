@@ -48,4 +48,23 @@ CREATE VIEW members_approved_for_voucher AS
  SELECT * FROM members_approved_for_voucher;
 
 ### 7 ###
-###For this challenge you need to create a simple SELECT statement. Your task is to calculate the MIN, MEDIAN and MAX scores of the students from the results table.###
+###Your job is to split out the letters and numbers from the address provided, and return a table in the following format.###
+SELECT  project,
+        REGEXP_REPLACE(address, '\d', '', 'g') AS letters,
+        REGEXP_REPLACE(address, '[a-zA-Z]', '', 'g') AS numbers
+FROM
+        repositories
+
+### 8 ###
+###Given a posts table that contains a created_at timestamp column write a query that returns date (without time component), a number of posts for a given date and a running (cumulative) total number of posts up until a given date. The resulting set should be ordered chronologically by date..###
+SELECT  tmp.date_s AS date,
+        tmp.count,
+        (SELECT COUNT(p1.id) FROM posts p1 WHERE DATE_PART('day', p1.created_at - tmp.date_s) <= 0) AS total
+FROM
+(SELECT CAST(p.created_at AS DATE) AS date_s,
+        COUNT(p.id) AS count
+FROM posts p
+GROUP BY CAST(p.created_at AS DATE)
+ORDER BY CAST(p.created_at AS DATE)) tmp
+
+### 9 ###
