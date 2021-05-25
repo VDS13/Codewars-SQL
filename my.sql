@@ -28,4 +28,24 @@ SELECT
 FROM decimals
 
 ### 5 ###
-###For this challenge you need to create a simple query to display each unique clan with their total points and ranked by their total points.###
+###For this challenge you need to create a SELECT statement that will contain data about departments that had a sale with a price over 98.00 dollars. This SELECT statement will have to use an EXISTS to achieve the task.###
+SELECT * FROM departments d
+  WHERE EXISTS (SELECT * FROM sales WHERE department_id = d.id AND price > 98)
+
+### 6 ###
+###For this challenge you need to create a VIEW. This VIEW is used by a sales store to give out vouches to members who have spent over $1000 in departments that have brought in more than $10000 total ordered by the members id. The VIEW must be called members_approved_for_voucher then you must create a SELECT query using the view.###
+CREATE VIEW members_approved_for_voucher AS
+  SELECT m.id, m.name, m.email, SUM(p.price) AS total_spending FROM members m
+    JOIN sales s ON s.member_id = m.id
+    JOIN products p ON p.id = s.product_id
+    WHERE s.department_id IN (SELECT s1.department_id FROM sales s1 
+                              LEFT JOIN  products p1 ON p1.id = s1.product_id 
+                              GROUP BY s1.department_id 
+                              HAVING SUM(p1.price) > 10000)
+    GROUP BY m.id, m.name, m.email
+    HAVING SUM(p.price) > 1000
+    ORDER BY m.id;
+ SELECT * FROM members_approved_for_voucher;
+
+### 7 ###
+###For this challenge you need to create a simple SELECT statement. Your task is to calculate the MIN, MEDIAN and MAX scores of the students from the results table.###
