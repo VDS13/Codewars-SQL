@@ -105,3 +105,13 @@ SELECT CAST(created_at AS DATE) AS day, description, COUNT(*) FROM events
   GROUP BY description, CAST(created_at AS DATE)
   ORDER BY day
 
+### 12(NO) ###
+### SQL Basics: Simple PIVOTING data(5 kyu) ###
+###For this challenge you need to PIVOT data. You have two tables, products and details. Your task is to pivot the rows in products to produce a table of products which have rows of their detail. Group and Order by the name of the Product.###
+CREATE EXTENSION tablefunc;
+SELECT * FROM crosstab (
+  'SELECT p.name, d.detail, COUNT(*) AS col FROM products p
+    JOIN details d ON d.product_id = p.id
+    GROUP BY p.name, d.detail
+    ORDER BY p.name, CASE WHEN d.detail LIKE `good` THEN 1 WHEN d.detail LIKE `ok` THEN 2 ELSE 3 END'
+) AS ct(name text, "good" text, "ok" text, "bad" text);
