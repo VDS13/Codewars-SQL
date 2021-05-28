@@ -190,3 +190,22 @@ SELECT
 ### Maximum Multiple(7 kyu) ###
 ###Given a Divisor and a Bound , Find the largest integer N , Such That:N is divisible by divisor,N is less than or equal to bound,N is greater than 0.###
 SELECT bound -(bound % divisor) AS res FROM max_multiple
+
+### 20 ###
+### Calculating Month-Over-Month Percentage Growth Rate(4 kyu) ###
+###Given a Divisor and a Bound , Find the largest integer N , Such That:N is divisible by divisor,N is less than or equal to bound,N is greater than 0.###
+SELECT  tmp1.created_at::date AS date,
+        tmp1.count,
+        CASE
+            WHEN tmp1.prev_count < tmp1.count
+                THEN CONCAT(TO_CHAR(ROUND(CAST((tmp1.count / tmp1.prev_count::float) * 100 - 100 AS FLOAT)::numeric, 1)::float, 'fm9990.0'), '%')
+            WHEN tmp1.prev_count > tmp1.count
+                THEN CONCAT(TO_CHAR(ROUND((-1) * CAST(((tmp1.prev_count::float - tmp1.count) / tmp1.prev_count::numeric) * 100 AS FLOAT)::numeric, 1)::float, 'fm9990.0'), '%')
+            WHEN tmp1.prev_count = tmp1.count
+                THEN CONCAT('0', '%')
+        END percent_growth
+FROM
+    (SELECT tmp.created_at, tmp.count, LAG(tmp.count) OVER(ORDER BY tmp.created_at) prev_count FROM
+        (SELECT to_char(created_at, 'yyyy-MM-01') AS created_at, COUNT(*) AS count FROM posts
+            GROUP BY to_char(created_at, 'yyyy-MM-01')
+            ORDER BY to_char(created_at, 'yyyy-MM-01')) tmp) tmp1
