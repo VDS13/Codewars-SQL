@@ -155,3 +155,33 @@ FROM
       GROUP BY p.name, d.detail
       ORDER BY p.name, d.detail) tmp) tmp1
   GROUP BY tmp1.name
+
+### 15 ###
+### SQL Basics: Simple WHERE and ORDER BY(8 kyu) ###
+###For this challenge you need to create a simple SELECT statement that will return all columns from the people table WHERE their age is over 50.###
+SELECT * FROM people
+  WHERE age > 50
+  ORDER BY age DESC
+
+### 16 ###
+### SQL Basics: Raise to the Power(7 kyu) ###
+###Return a table with one column (result) which is the output of number1 raised to the power of number2.###
+SELECT POW(number1,number2) AS result FROM decimals;
+
+### 17 ###
+### Sum of angles(7 kyu) ###
+###Find the total sum of internal angles (in degrees) in an n-sided simple polygon. N will be greater than 2.###
+SELECT 180 * (n - 2) AS res FROM angle;
+
+### 18 ###
+### SQL Bug Fixing: Fix the JOIN(6 kyu) ###
+###Help Timmy keep his job by fixing his query...###
+SELECT 
+  j.job_title,
+  CAST(ROUND(SUM(j.salary) / COUNT(p.id),2) AS FLOAT) as average_salary,
+  COUNT(p.id) as total_people,
+  CAST(ROUND(SUM(j.salary),2) AS FLOAT) as total_salary
+  FROM people p
+    JOIN job j ON j.people_id = p.id
+  GROUP BY j.job_title
+  ORDER BY average_salary DESC
