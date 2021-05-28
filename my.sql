@@ -115,3 +115,43 @@ SELECT * FROM crosstab (
     GROUP BY p.name, d.detail
     ORDER BY p.name, d.detail'
 ) AS ct (name text, bad bigint, good bigint, ok bigint);
+
+
+### 13 ###
+### SQL Basics: Create a FUNCTION (DATES)(6 kyu) ###
+###For this challenge you need to create a basic Age Calculator function which calculates the age in years on the age field of the peoples table.###
+###The function should be called agecalculator, it needs to take 1 date and calculate the age in years according to the date NOW and must return an integer.###
+###You may query the people table while testing but the query must only contain the function on your final submit.###
+CREATE FUNCTION agecalculator(date) RETURNS double precision AS $$
+  SELECT DATE_PART('year', AGE(NOW(), $1));
+  $$ LANGUAGE SQL  IMMUTABLE RETURNS NULL ON NULL INPUT;
+
+### 14 ###
+### SQL Basics: Simple PIVOTING data WITHOUT CROSSTAB(6 kyu) ###
+###You need to build a pivot table WITHOUT using CROSSTAB function. Having two tables products and details you need to select a pivot table of products with counts of details occurrences (possible details values are ['good', 'ok', 'bad'].###
+SELECT
+  tmp1.name, CAST(SUM(tmp1.good) AS INT) AS good, CAST(SUM(tmp1.ok) AS INT) AS ok, CAST(SUM(tmp1.bad) AS INT) AS bad
+FROM
+  (SELECT
+    tmp.name,
+    CASE
+      WHEN tmp.detail LIKE 'good'
+        THEN tmp.count
+        ELSE NULL
+    END AS good,
+    CASE
+      WHEN tmp.detail LIKE 'ok'
+        THEN tmp.count
+        ELSE NULL
+    END AS ok,
+    CASE
+      WHEN tmp.detail LIKE 'bad'
+        THEN tmp.count
+        ELSE NULL
+    END AS bad
+  FROM
+    (SELECT p.name, d.detail, COUNT(*) AS count FROM products p
+      JOIN details d ON d.product_id = p.id
+      GROUP BY p.name, d.detail
+      ORDER BY p.name, d.detail) tmp) tmp1
+  GROUP BY tmp1.name
