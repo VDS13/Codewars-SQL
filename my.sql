@@ -185,3 +185,8 @@ SELECT
     JOIN job j ON j.people_id = p.id
   GROUP BY j.job_title
   ORDER BY average_salary DESC
+
+### 19 ###
+### Maximum Multiple(7 kyu) ###
+###Given a Divisor and a Bound , Find the largest integer N , Such That:N is divisible by divisor,N is less than or equal to bound,N is greater than 0.###
+SELECT bound -(bound % divisor) AS res FROM max_multiple
