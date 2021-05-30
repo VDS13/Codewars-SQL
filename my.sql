@@ -209,3 +209,27 @@ FROM
         (SELECT to_char(created_at, 'yyyy-MM-01') AS created_at, COUNT(*) AS count FROM posts
             GROUP BY to_char(created_at, 'yyyy-MM-01')
             ORDER BY to_char(created_at, 'yyyy-MM-01')) tmp) tmp1
+
+### 21 ###
+### SQL Basics: Simple HAVING(6 kyu) ###
+###For this challenge you need to create a simple HAVING statement, you want to count how many people have the same age and return the groups with 10 or more people who have that age.###
+SELECT age, COUNT(*) AS total_people FrOM people
+    GROUP BY age
+    HAVING COUNT(*) >= 10
+
+### 22 ###
+### Keep Hydrated!(8 kyu) ###
+###You get given the time in hours and you need to return the number of litres Nathan will drink, rounded to the smallest value.###
+SELECT id, hours, FLOOR(hours * 0.5) AS liters FROM cycling
+
+### 23 ###
+### SQL Bug Fixing: Fix the QUERY - Totaling(6 kyu) ###
+###Timmy works for a statistical analysis company and has been given a task of totaling the number of sales on a given day grouped by each department name and then each day.###
+SELECT
+    CAST(s.transaction_date AS DATE) as day,
+    d.name AS department,
+    COUNT(s.id) AS sale_count
+FROM department d
+    JOIN sale s on d.id = s.department_id
+    group by day, d.name
+    order by day
