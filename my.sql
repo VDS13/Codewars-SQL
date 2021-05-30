@@ -233,3 +233,32 @@ FROM department d
     JOIN sale s on d.id = s.department_id
     group by day, d.name
     order by day
+
+### 24 ###
+### Relational division: Find all movies two actors cast in together(5 kyu) ###
+###Given film_actor and film tables from the DVD Rental sample database find all movies both Sidney Crowe (actor_id = 105) and Salma Nolte (actor_id = 122) cast in together and order the result set alphabetically.###
+SELECT f.title FROM film f
+    LEFT JOIN film_actor fa ON fa.film_id = f.film_id
+    WHERE fa.actor_id = 105 OR fa.actor_id = 122
+    GROUP BY f.title
+    HAVING COUNT(fa.actor_id) = 2
+    ORDER BY f.title
+
+### 25 ###
+### Challenge: Two actors who cast together the most(4 kyu) ###
+###Given the the schema presented below find two actors who cast together the most and list titles of only those movies they were casting together. Order the result set alphabetically by the movie title.###
+SELECT  CONCAT(a1.first_name, ' ', a1.last_name) AS first_actor,
+        CONCAT(a2.first_name, ' ', a2.last_name) AS second_actor,
+        f1.title
+FROM film f1
+    JOIN film_actor fa1 ON fa1.film_id = f1.film_id
+    JOIN actor a1 ON a1.actor_id = fa1.actor_id
+    JOIN (
+        SELECT fa1.actor_id AS first, fa2.actor_id AS second FROM film_actor fa1, film_actor fa2
+            WHERE fa1.actor_id < fa2.actor_id AND fa1.film_id = fa2.film_id
+            GROUP BY fa1.actor_id, fa2.actor_id
+            ORDER BY COUNT(*) DESC
+            LIMIT 1 ) tmp ON tmp.first = a1.actor_id
+    JOIN actor a2 ON a2.actor_id = tmp.second
+    JOIN film_actor fa2 ON fa2.actor_id = a2.actor_id
+    WHERE fa1.film_id = fa2.film_id
