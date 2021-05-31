@@ -262,3 +262,14 @@ FROM film f1
     JOIN actor a2 ON a2.actor_id = tmp.second
     JOIN film_actor fa2 ON fa2.actor_id = a2.actor_id
     WHERE fa1.film_id = fa2.film_id
+
+### 26 ###
+### SQLonacci sequence(5 kyu) ###
+###You need to create a select statement which will produce first 90 Fibonnacci numbers. The column name is - number.###
+WITH RECURSIVE fibonacci(i, number, a) AS (
+    SELECT 1, 0::bigint, 1::bigint
+    UNION ALL
+    SELECT i + 1, a, number + a FROM fibonacci
+        WHERE i < 90
+   )
+SELECT number FROM fibonacci
